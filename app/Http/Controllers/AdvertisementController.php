@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Advertisement;
+use App\Models\Appeal;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdvertisementController extends Controller
 {
@@ -15,7 +19,15 @@ class AdvertisementController extends Controller
      */
     public function index()
     {
-        //
+         
+          $rolid=Auth::user()->role_id;
+        if($rolid==0){
+            $ilanListesi=Advertisement::all();
+            return view("front.advertisementlist",compact("ilanListesi"));
+        }
+        else {
+            return view('admin.createadvertisement');
+        }
     }
 
     /**
@@ -53,7 +65,7 @@ class AdvertisementController extends Controller
         $newCreate->description=$request->desc;
         $newCreate->save();
         return response()->json(["status"=>"200","mesaj"=>"Başarılı"]);
-
+        
 
 
         //return Response()->json($arr);
@@ -102,5 +114,19 @@ class AdvertisementController extends Controller
     public function destroy(Advertisement $advertisement)
     {
         //
+    }
+
+    public function appeal($ilanid){
+        $userid=Auth::user()->id;
+        $newcreate=new Appeal();
+        $newcreate->uye_id=$userid;
+        $newcreate->basvuru_id=$ilanid;
+        $newcreate->save();
+        return Redirect::back()->withErrors(['msg' => 'Başvurunuz Alındı.']);
+    }
+
+    public function basvurular(){
+      $basvurular = DB::select('SELECT ap.id,ad.title,us.name,ap.created_at FROM appeals ap, advertisements ad, users us WHERE us.id=ap.uye_id AND ad.id=ap.basvuru_id');
+      return view("front.basvurular",compact("basvurular"));  
     }
 }

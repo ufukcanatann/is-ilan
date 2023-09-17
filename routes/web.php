@@ -19,7 +19,16 @@ Route::get('/', function () {
 });
 
 Route::resource('/advertisement', "App\Http\Controllers\AdvertisementController");
+Route::get('/appeal/{id}', "App\Http\Controllers\AdvertisementController@appeal");
+Route::get('/basvurular', "App\Http\Controllers\AdvertisementController@basvurular");
+
+//Route::get('/appeal/{id}', [App\Http\Controllers\AdvertisementControlle::class, 'appeal'])->name('appeal');
+
+
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+

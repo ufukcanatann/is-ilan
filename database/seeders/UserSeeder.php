@@ -2,10 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
@@ -17,13 +15,17 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        for ($i=0; $i<5; $i++){
+        $names = ['Ufuk', 'Ali', 'Ahmet', 'Mehmet', 'Hasan'];
+        $usersNumber = 5;
+        for ($i = 0; $i < $usersNumber; $i++) {
+            $randomName = $names[array_rand($names)];
             DB::table('users')->insert([
-                'roleid' => rand(0,2),
-                'name' => Str::random(10),
-                'email' => Str::random(10).'@gmail.com',
+                'roleid' => rand(0, 2),
+                'name' => $randomName,
+                'email' => $randomName . '@gmail.com',
                 'password' => Hash::make('password'),
             ]);
         }
+
     }
 }

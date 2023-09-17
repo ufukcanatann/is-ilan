@@ -24,8 +24,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $rolid=Auth::user()->roleid;
-        if($rolid==0){
+         $rolid=Auth::user()->role_id;
+        if($rolid==1){
             $ilanListesi=Advertisement::all();
             return view("front.advertisementlist",compact("ilanListesi"));
         }

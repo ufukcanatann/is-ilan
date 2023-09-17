@@ -1,48 +1,53 @@
 @extends('layouts.app')
 
 @section('content')
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
 <div class="container">
+
     <div class="alert alert-danger print-error-msg" style="display:none">
         <ul></ul>
     </div>
-    <form id="advertisement">
-        @csrf
-        <div class="form-group">
-            <label for="titleInput">Title</label>
-            <input type="text" class="form-control" id="titleInput" name="title" aria-describedby="emailHelp" placeholder="Enter email">
-            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+
+    <div class="row justify-content-center">
+        <div class="col-12 d-flex justify-content-end">
+            <a href="/advertisement">İlanlara bak</a>
         </div>
-        <div class="form-group">
-            <label for="descInput">Description</label>
-            <input type="text" class="form-control" name="desc" id="descInput" placeholder="Password">
+        <div class="col-6">
+            <form id="advertisement">
+                @csrf
+                <div class="form-group">
+                    <label for="titleInput"><strong>Başlık</strong></label>
+                    <input type="text" class="form-control" id="titleInput" name="title" placeholder="Başlık">
+                </div>
+                <div class="form-group mt-2">
+                    <label for="descInput"><strong>Açıklama</strong></label>
+                    <input type="textarea" class="form-control" name="desc" id="descInput" rows="3" placeholder="Açıklama">
+                </div>
+                <button type="buttton" id="save" class="btn btn-primary mt-2">Kaydet</button>
+            </form>
         </div>
-        <button type="buttton" id="kaydet" class="btn btn-primary">Submit</button>
-    </form>
+    </div>
 </div>
 
 <script>
-    $("#kaydet").click(function() {
+    var target = window.location.origin+"/advertisement";
 
+    $("#save").click(function(e) {
+        e.preventDefault();
         $.ajax({
             url: '/advertisement',
             type: "POST",
             data: $('#advertisement').serialize(),
             success: function(data) {
-
+                    window.location.href=target;
                 if ($.isEmptyObject(data.error)) {
                     alert(data.mesaj);
-                    location.reload();
                 } else {
                     printErrorMsg(data.error);
                 }
             }
         });
-
     })
-
-
 
     function printErrorMsg(msg) {
         $(".print-error-msg").find("ul").html('');
